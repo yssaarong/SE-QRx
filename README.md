@@ -9,3 +9,7 @@ QRx is a web-based and mobile-friendly application designed to help users verify
 UML Diagram:
 
 <img src="images/qrx_uml.jpg" alt="QRx UML" width="600">
+
+Class Diagram:
+
+<img src="images/qrx_class_diagram.jpg" alt="QRx Class Diagram" width="600">
