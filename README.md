@@ -7,6 +7,5 @@ QRx is a web-based and mobile-friendly application designed to help users verify
 ## QRx Design Artifacts
 
 UML Diagram:
-<img src="images/qrx_uml.jpg" alt="UML Diagram:" width="600">
 
-
+<img src="images/qrx_uml.jpg" alt="QRx UML" width="600">
