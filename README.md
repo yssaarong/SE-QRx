@@ -12,4 +12,5 @@ UML Diagram:
 
 Class Diagram:
 
-<img src="images/qrx_class_diagram.jpg" alt="QRx Class Diagram" width="600">
+<img src="images/qrx_class_diagram.png" alt="QRx Class Diagram" width="600">
+
