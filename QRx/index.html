@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QRx Login</title>
+  <title>Tambal Check Login</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="login-container">
     <div class="login-box">
-      <h1 class="title">QRx</h1>
-      <p class="subtitle">Verify your medicine safely</p>
+      <h1 class="title">Tambal Check</h1>
+      <p class="subtitle">Scan & verify your medicine safely</p>
 
       <form id="loginForm">
         <div class="input-group">
@@ -18,24 +18,33 @@
           <input type="text" id="username" name="username" placeholder="Enter username" required>
         </div>
 
-        <div class="input-group">
+        <div class="input-group password-group">
           <label for="password">Password</label>
           <input type="password" id="password" name="password" placeholder="Enter password" required>
+          <span id="togglePassword" class="eye-icon">👁️</span>
         </div>
 
-
-        <div class="input-group">
-          <label>
-            <input type="checkbox" id="rememberMe"> Remember me
-          </label>
+        <div class="options">
+          <label><input type="checkbox" id="rememberMe"> Remember me</label>
+          <a href="#" class="forgot">Forgot password?</a>
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit" id="loginButton">Login</button>
+        <div id="loader" class="loader" style="display:none;"></div>
+
         <p class="signup-text">Don’t have an account? <a href="#">Sign up</a></p>
+
+        <div class="language-select">
+          <label for="language">🌍 Language:</label>
+          <select id="language">
+            <option value="en">English</option>
+            <option value="ceb">Cebuano</option>
+            <option value="tl">Tagalog</option>
+          </select>
+        </div>
       </form>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
