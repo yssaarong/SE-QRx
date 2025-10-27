@@ -1,6 +1,6 @@
 body {
   font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #d6f5e6, #b3e5fc); /* pastel mint + light blue */
+  background: linear-gradient(135deg, #d6f5e6, #b3e5fc);
   height: 100vh;
   margin: 0;
   display: flex;
@@ -63,7 +63,7 @@ input:focus {
 button {
   width: 100%;
   padding: 0.7rem;
-  background: #66c2a5; /* soft green */
+  background: #66c2a5;
   color: white;
   border: none;
   border-radius: 0.6rem;
