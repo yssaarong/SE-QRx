@@ -6,10 +6,19 @@ document.addEventListener("DOMContentLoaded", function () {
   const loginButton = document.getElementById("loginButton");
   const languageSelect = document.getElementById("language");
 
+  passwordField.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      loginButton.click();
+    }
+  });
+
   togglePassword.addEventListener("click", () => {
     const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
     passwordField.setAttribute("type", type);
     togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+    
+    togglePassword.classList.add("fade");
+    setTimeout(() => togglePassword.classList.remove("fade"), 200);
   });
 
   loginForm.addEventListener("submit", (e) => {

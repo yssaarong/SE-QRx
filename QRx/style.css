@@ -145,3 +145,7 @@ button:hover {
     padding: 1.8rem;
   }
 }
+.eye-icon.fade {
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
