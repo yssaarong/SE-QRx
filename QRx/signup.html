@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QRx Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <h1 class="title">QRx</h1>
+      <p class="subtitle">Create your account to verify medicines safely</p>
+
+      <form id="signupForm">
+        <div class="input-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" placeholder="Enter username" required>
+        </div>
+
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Enter email" required>
+        </div>
+
+        <div class="input-group password-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Enter password" required>
+          <span id="togglePassword" class="eye-icon">👁️</span>
+        </div>
+
+        <div class="input-group password-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+          <span id="toggleConfirm" class="eye-icon">👁️</span>
+        </div>
+
+        <button type="submit" id="signupButton">Sign Up</button>
+        <div id="loader" class="loader" style="display:none;"></div>
+
+        <p class="signup-text">Already have an account? <a href="index.html">Login</a></p>
+      </form>
+    </div>
+  </div>
+  <script src="signup.js"></script>
+</body>
+</html>
