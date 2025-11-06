@@ -1,0 +1,22 @@
+name: qrx_app
+description: QRx mobile app
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  mobile_scanner: ^3.5.6  # For QR scanning
+  http: ^1.1.0             # For API/database calls
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  # No theme here—it's in main.dart!
