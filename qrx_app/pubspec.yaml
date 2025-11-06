@@ -1,22 +1,24 @@
-name: qrx_app
-description: QRx mobile app
+name: my_app
+description: A new Flutter project.
+# The following line prevents the package from being accidentally published to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.4.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
-  mobile_scanner: ^3.5.6  # For QR scanning
-  http: ^1.1.0             # For API/database calls
+
+  cupertino_icons: ^1.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
-  # No theme here—it's in main.dart!
