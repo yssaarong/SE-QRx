@@ -1,0 +1,17 @@
+name: qrx_app
+description: A Flutter app for verifying medicine authenticity via QR scanning.
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
