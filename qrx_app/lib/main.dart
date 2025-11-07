@@ -1,25 +1,19 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
+import 'home_screen.dart'; 
 
-void main() {
-  runApp(const QRxApp());
-}
+void main() { 
+  runApp(const QRxApp()); 
+} 
 
-class QRxApp extends StatelessWidget {
-  const QRxApp({super.key});
+class QRxApp extends StatelessWidget { 
+  const QRxApp({super.key}); 
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'QRx',
-      debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(
-          child: Text(
-            'QRx App',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
-  }
+  @override 
+  Widget build(BuildContext context) { 
+    return MaterialApp( 
+      title: 'QRx', 
+      debugShowCheckedModeBanner: false, 
+      home: const HomeScreen(), 
+    ); 
+  } 
 }
