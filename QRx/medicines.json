@@ -1,6 +1,0 @@
-{
-  "QRX-001": { "name": "Paracetamol 500mg", "company": "MediHealth", "status": "Authentic" },
-  "QRX-002": { "name": "Amoxicillin 250mg", "company": "SafePharma", "status": "Authentic" },
-  "QRX-999": { "name": "PainAway Capsule", "company": "FakePharma", "status": "Counterfeit" },
-  "QRX-888": { "name": "CoughEase Syrup", "company": "MediLife", "status": "Expired" }
-}
