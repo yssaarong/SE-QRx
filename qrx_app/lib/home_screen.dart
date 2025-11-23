@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final String userName;
+
+  const HomeScreen({super.key, this.userName = "User"});
 
   @override
   Widget build(BuildContext context) {
@@ -9,36 +11,115 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFA7E3F0), Color(0xFFB8E6C9)],
+            colors: [Color(0xFFD8F3E6), Color(0xFFB7E5EA)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
-        child: Center(
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'QRx',
-                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+              const SizedBox(height: 150),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      "QRx",
+                      style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      "Let's check if your medicine is safe and correct for you.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black54,
+                        fontWeight: FontWeight.normal,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 40),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    _HomeButton(
+                      label: "Scan QR",
+                      icon: Icons.qr_code_scanner,
+                      color: Color(0xFF3399CC),
+                    ),
+                    SizedBox(height: 28),
+                    _HomeButton(
+                      label: "Input Medicine",
+                      icon: Icons.medication,
+                      color: Color(0xFFD8F3E6),
+                    ),
+                  ],
                 ),
-                child: const Text('Scan QR'),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+              const SizedBox(height: 80), // Approx. "2 inches" below Input Medicine
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
+                  "Prioritize your health with QRx. This app empowers you to verify your medicines, avoid potential risks, and ensure you’re making safe choices every time you take your medication.",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black45,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                child: const Text('Input Medicine'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final Color color;
+
+  const _HomeButton({
+    required this.label,
+    required this.icon,
+    required this.color,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: color,
+      borderRadius: BorderRadius.circular(24),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: () {
+          // Add navigation or action logic here
+        },
+        child: Container(
+          width: 220,
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 28, color: Colors.black87),
+              const SizedBox(width: 18),
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
               ),
             ],
           ),
