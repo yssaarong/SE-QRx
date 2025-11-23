@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      "Let's check if your medicine is safe and correct for you.",
+                      "Let's check if your medicine is SAFE and RIGHT for you.",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.black54,
