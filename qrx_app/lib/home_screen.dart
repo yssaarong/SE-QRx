@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'scan_screen.dart';
+import 'input_medicine_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
@@ -69,7 +70,12 @@ class HomeScreen extends StatelessWidget {
                       icon: Icons.medication,
                       color: const Color(0xFFD8F3E6),
                       onTap: () {
-                        // TODO: Input Medicine screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const InputMedicineScreen(),
+                          ),
+                        );
                       },
                     ),
                   ],
