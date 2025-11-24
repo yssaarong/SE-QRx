@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'scan_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
@@ -48,22 +49,33 @@ class HomeScreen extends StatelessWidget {
               Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     _HomeButton(
                       label: "Scan QR",
                       icon: Icons.qr_code_scanner,
-                      color: Color(0xFF3399CC),
+                      color: const Color(0xFF3399CC),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const ScanScreen(),
+                          ),
+                        );
+                      },
                     ),
-                    SizedBox(height: 28),
+                    const SizedBox(height: 28),
                     _HomeButton(
                       label: "Input Medicine",
                       icon: Icons.medication,
-                      color: Color(0xFFD8F3E6),
+                      color: const Color(0xFFD8F3E6),
+                      onTap: () {
+                        // TODO: Input Medicine screen
+                      },
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 80), 
+              const SizedBox(height: 80),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
@@ -87,11 +99,13 @@ class _HomeButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color color;
+  final VoidCallback onTap;
 
   const _HomeButton({
     required this.label,
     required this.icon,
     required this.color,
+    required this.onTap,
     Key? key,
   }) : super(key: key);
 
@@ -102,9 +116,7 @@ class _HomeButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(24),
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
-        onTap: () {
-          // Add navigation or action logic here
-        },
+        onTap: onTap,
         child: Container(
           width: 220,
           padding: const EdgeInsets.symmetric(vertical: 20),
