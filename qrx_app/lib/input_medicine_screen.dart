@@ -12,9 +12,9 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
   bool _submitted = false;
   bool _isSafe = false;
 
-  // Example data 
+  // Example data
   final String safeMedicine = "Paracetamol";
-  final String safeManufacturer = "Acme Pharma";
+  final String safeManufacturer = "Unilab";
 
   void _validateMedicine() {
     setState(() {
@@ -62,14 +62,17 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                 ? _isSafe
                     ? Column(
                         children: [
-                          const Icon(Icons.check_circle, color: Colors.green, size: 48),
-                          const Text("Medicine is SAFE!", style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Icon(Icons.check_circle,
+                              color: Colors.green, size: 48),
+                          const Text("Medicine is SAFE!",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       )
                     : Column(
                         children: [
                           const Icon(Icons.cancel, color: Colors.red, size: 48),
-                          const Text("Medicine NOT found or NOT safe.", style: TextStyle(fontWeight: FontWeight.bold)),
+                          const Text("Medicine NOT found or NOT safe.",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       )
                 : Container(),
