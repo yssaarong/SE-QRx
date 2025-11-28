@@ -12,8 +12,15 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
   final TextEditingController _manufacturerController = TextEditingController();
   bool _submitted = false;
   bool _isSafe = false;
+<<<<<<< HEAD
   String _statusMessage = "";
   String _medicineStatus = "";
+=======
+
+  // Example data
+  final String safeMedicine = "Paracetamol";
+  final String safeManufacturer = "Unilab";
+>>>>>>> 85ca5258b45b973c3950eddb288a60395146fb6b
 
   void _validateMedicine() {
     setState(() {
@@ -116,6 +123,7 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                   fillColor: Colors.white,
                 ),
               ),
+<<<<<<< HEAD
               const SizedBox(height: 16),
               TextField(
                 controller: _manufacturerController,
@@ -227,6 +235,34 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                 ),
             ],
           ),
+=======
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _validateMedicine,
+              child: const Text('Check'),
+            ),
+            const SizedBox(height: 24),
+            _submitted
+                ? _isSafe
+                    ? Column(
+                        children: [
+                          const Icon(Icons.check_circle,
+                              color: Colors.green, size: 48),
+                          const Text("Medicine is SAFE!",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          const Icon(Icons.cancel, color: Colors.red, size: 48),
+                          const Text("Medicine NOT found or NOT safe.",
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      )
+                : Container(),
+          ],
+>>>>>>> 85ca5258b45b973c3950eddb288a60395146fb6b
         ),
       ),
     );
