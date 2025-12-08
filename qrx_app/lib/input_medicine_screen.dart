@@ -102,8 +102,7 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                         ),
                       ),
                       // NOT SAFE! red text when not safe
-                      if (_submitted && !_isSafe)
-                        const SizedBox(height: 4),
+                      if (_submitted && !_isSafe) const SizedBox(height: 4),
                       if (_submitted && !_isSafe)
                         const Text(
                           "NOT SAFE!",
