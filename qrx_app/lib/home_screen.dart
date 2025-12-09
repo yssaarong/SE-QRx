@@ -4,94 +4,174 @@ import 'input_medicine_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
+  final String language; // "en", "ceb", "fil"
 
-  const HomeScreen({super.key, this.userName = "User"});
+  const HomeScreen({
+    super.key,
+    this.userName = "User",
+    this.language = "en",
+  });
 
   @override
   Widget build(BuildContext context) {
+    final texts = _texts[language]!;
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFD8F3E6), Color(0xFFB7E5EA)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
+      backgroundColor: const Color(0xFFA9DFF5),
+      body: SafeArea(
+        child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(height: 150),
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      "QRx",
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      "Let's check if your medicine is SAFE and RIGHT for you.",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+              // Title
+              Text(
+                texts['title']!,
+                style: const TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
+                  color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 40),
-              Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _HomeButton(
-                      label: "Scan QR",
-                      icon: Icons.qr_code_scanner,
-                      color: const Color(0xFF3399CC),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ScanScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 28),
-                    _HomeButton(
-                      label: "Input Medicine",
-                      icon: Icons.medication,
-                      color: const Color(0xFFD8F3E6),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const InputMedicineScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
+              const SizedBox(height: 8),
+
+              // Subtitle
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Text(
+                  texts['subtitle']!,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
-              const SizedBox(height: 80),
+
+              const SizedBox(height: 30),
+
+              // Scan QR button
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ScanScreen()),
+                  );
+                },
+                child: Container(
+                  width: 220,
+                  height: 55,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3399FF),
+                    borderRadius: BorderRadius.circular(28),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.qr_code_scanner,
+                        color: Colors.white,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        texts['scan']!,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 18),
+
+              // Input Medicine button
+              _HomeButton(
+                label: texts['input']!,
+                icon: Icons.edit_note,
+                color: Colors.white,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const InputMedicineScreen(),
+                    ),
+                  );
+                },
+              ),
+
+              const SizedBox(height: 12),
+
+              // Find Medicine button
+              _HomeButton(
+                label: texts['find']!,
+                icon: Icons.search,
+                color: Colors.white,
+                onTap: () {},
+              ),
+
+              const SizedBox(height: 26),
+
+              // Description
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
-                  "Prioritize your health with QRx. This app empowers you to verify your medicines, avoid potential risks, and ensure you’re making safe choices every time you take your medication.",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black45,
-                  ),
+                  texts['desc']!,
                   textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Colors.black87,
+                  ),
                 ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Languages with navigation
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const HomeScreen(language: "en"),
+                        ),
+                      );
+                    },
+                    child: const Text("English"),
+                  ),
+                  const SizedBox(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const HomeScreen(language: "ceb"),
+                        ),
+                      );
+                    },
+                    child: const Text("Cebuano"),
+                  ),
+                  const SizedBox(width: 24),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const HomeScreen(language: "fil"),
+                        ),
+                      );
+                    },
+                    child: const Text("Filipino"),
+                  ),
+                ],
               ),
             ],
           ),
@@ -100,6 +180,39 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+// Texts for each language
+final Map<String, Map<String, String>> _texts = {
+  "en": {
+    "title": "QRx",
+    "subtitle": "Let's check if your medicine is SAFE and RIGHT for you.",
+    "scan": "Scan QR",
+    "input": "Input Medicine",
+    "find": "Find Medicine",
+    "desc":
+        "Prioritize your health with QRx. This app empowers you to verify your medicines, avoid potential risks, and ensure you’re making safe choices every time you take your medication.",
+  },
+  "ceb": {
+    "title": "QRx",
+    "subtitle":
+        "Ato nga susihon kung ang imong tambal SAKTO ug ANGAY para kanimo.",
+    "scan": "I-scan ang QR",
+    "input": "Pag-Input ug Tambal",
+    "find": "Pangita ug Tambal",
+    "desc":
+        "Unaha ang imong kahimsog pinaagi sa QRx. Ang maong app naghatag og gahum kanimo aron mapamatud-an ang pagka-tinuod sa imong mga medisina, malikayan ang posibleng mga risgo, ug masiguro ang luwas nga pagpili sa matag higayon nga moinom ka og tambal.",
+  },
+  "fil": {
+    "title": "QRx",
+    "subtitle":
+        "Suriin natin kung ang iyong gamot ay LIGTAS at TAMA para sa iyo.",
+    "scan": "I-scan ang QR",
+    "input": "Mag-input ng Gamot",
+    "find": "Maghanap ng Gamot",
+    "desc":
+        "Unahin ang iyong kalusugan gamit ang QRx. Binibigyan ka ng kapangyarihan ng app na ito na i-verify ang iyong mga gamot, maiwasan ang mga potensyal na panganib, at tiyaking gumagawa ka ng ligtas na desisyon sa tuwing iinom ka ng iyong gamot.",
+  },
+};
 
 class _HomeButton extends StatelessWidget {
   final String label;
@@ -119,22 +232,22 @@ class _HomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: color,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(22),
       child: InkWell(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         onTap: onTap,
         child: Container(
           width: 220,
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 28, color: Colors.black87),
-              const SizedBox(width: 18),
+              Icon(icon, size: 22, color: Colors.black87),
+              const SizedBox(width: 12),
               Text(
                 label,
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,
                 ),
