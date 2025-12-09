@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'medicine_database.dart';
 
 class InputMedicineScreen extends StatefulWidget {
@@ -11,13 +12,35 @@ class InputMedicineScreen extends StatefulWidget {
 class _InputMedicineScreenState extends State<InputMedicineScreen> {
   final TextEditingController _medicineController = TextEditingController();
   final TextEditingController _manufacturerController = TextEditingController();
+  final FlutterTts flutterTts = FlutterTts();
 
   bool _submitted = false;
   bool _isSafe = false;
   String _statusMessage = "";
-  String _medicineStatus = ""; // Safe / Counterfeit / Expired / Not Found
+  String _medicineStatus = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _initTts();
+  }
+
+  @override
+  void dispose() {
+    flutterTts.stop();
+    _medicineController.dispose();
+    _manufacturerController.dispose();
+    super.dispose();
+  }
+
+  void _initTts() async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setSpeechRate(0.5);
+  }
 
   void _validateMedicine() {
+    flutterTts.stop();
+
     setState(() {
       _submitted = true;
       final inputMedicine = _medicineController.text.trim();
@@ -27,6 +50,7 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
         _isSafe = false;
         _medicineStatus = "Not Found";
         _statusMessage = "Please fill in all fields";
+        _speakResult("Please fill in both the medicine name and manufacturer.");
         return;
       }
 
@@ -48,7 +72,28 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
         _medicineStatus = "Not Found";
         _statusMessage = "Medicine NOT found in database";
       }
+
+      _speakResultLogic(inputMedicine);
     });
+  }
+
+  void _speakResultLogic(String name) {
+    String speech = "";
+    if (_medicineStatus == "Safe") {
+      speech = "The medicine $name is Verified Safe to use.";
+    } else if (_medicineStatus == "Not Found") {
+      speech =
+          "Medicine not found in the database. Please check your spelling.";
+    } else if (_medicineStatus == "Counterfeit") {
+      speech = "Warning. The medicine $name appears to be Counterfeit.";
+    } else {
+      speech = "Warning. The medicine $name is $_medicineStatus.";
+    }
+    _speakResult(speech);
+  }
+
+  Future<void> _speakResult(String text) async {
+    await flutterTts.speak(text);
   }
 
   Color _getStatusColor() {
@@ -93,15 +138,32 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        _submitted ? _medicineStatus : "",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: statusColor,
+                      // Status Text + Audio Button Row
+                      if (_submitted)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              _medicineStatus,
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: statusColor,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            // THE SMALL BUTTON
+                            IconButton(
+                              icon: const Icon(Icons.volume_up),
+                              color: statusColor,
+                              onPressed: () => _speakResultLogic(
+                                  _medicineController.text.isNotEmpty
+                                      ? _medicineController.text
+                                      : "Unknown"),
+                            ),
+                          ],
                         ),
-                      ),
-                      // NOT SAFE! red text when not safe
+
                       if (_submitted && !_isSafe) const SizedBox(height: 4),
                       if (_submitted && !_isSafe)
                         const Text(

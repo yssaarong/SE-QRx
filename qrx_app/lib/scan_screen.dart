@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'medicine_database.dart';
 
 class ScanScreen extends StatefulWidget {
@@ -11,6 +12,7 @@ class ScanScreen extends StatefulWidget {
 
 class _ScanScreenState extends State<ScanScreen> {
   final MobileScannerController cameraController = MobileScannerController();
+  final FlutterTts flutterTts = FlutterTts();
 
   // State variables
   bool _scanned = false;
@@ -18,11 +20,22 @@ class _ScanScreenState extends State<ScanScreen> {
   String _medicineName = "";
   String _manufacturer = "";
 
-  // Process QR code and verify against database
+  @override
+  void initState() {
+    super.initState();
+    _initTts();
+  }
+
+  void _initTts() async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setPitch(1.0);
+  }
+
   void _processQRCode(String qrData) {
     final parts = qrData.split('|');
 
-    // Handle invalid format
     if (parts.length != 2) {
       setState(() {
         _scanned = true;
@@ -30,13 +43,13 @@ class _ScanScreenState extends State<ScanScreen> {
         _medicineName = "Unknown";
         _manufacturer = "Unknown";
       });
+      _announceResult();
       return;
     }
 
     _medicineName = parts[0].trim();
     _manufacturer = parts[1].trim();
 
-    // Find medicine in database
     final medicine = medicineDatabase.firstWhere(
       (med) =>
           med['name']!.toLowerCase() == _medicineName.toLowerCase() &&
@@ -48,9 +61,32 @@ class _ScanScreenState extends State<ScanScreen> {
       _scanned = true;
       _medicineStatus = medicine['status']!;
     });
+
+    _announceResult();
   }
 
-  // Get status color
+  // Speak Logic
+  void _announceResult() async {
+    String speechText = "";
+
+    if (_medicineStatus == 'Safe') {
+      speechText =
+          "Verified Safe. The medicine $_medicineName by $_manufacturer is authentic and safe to use.";
+    } else if (_medicineStatus == 'Counterfeit') {
+      speechText =
+          "Warning! This medicine appears to be Counterfeit. Do not use.";
+    } else if (_medicineStatus == 'Expired') {
+      speechText = "Warning! This medicine is Expired. Do not use.";
+    } else if (_medicineStatus == 'Not Found') {
+      speechText =
+          "Medicine not found in the database. Please verify manually.";
+    } else {
+      speechText = "Invalid QR code format.";
+    }
+
+    await flutterTts.speak(speechText);
+  }
+
   Color _getStatusColor() {
     return {
           'Safe': Colors.green,
@@ -61,8 +97,8 @@ class _ScanScreenState extends State<ScanScreen> {
         Colors.black54;
   }
 
-  // Reset for new scan
-  void _resetScan() {
+  void _resetScan() async {
+    await flutterTts.stop();
     setState(() {
       _scanned = false;
       _medicineStatus = "";
@@ -75,12 +111,12 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   void dispose() {
     cameraController.dispose();
+    flutterTts.stop();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Light blue background color from your design
     const backgroundColor = Color(0xFFCFF4FA);
 
     return Scaffold(
@@ -90,13 +126,15 @@ class _ScanScreenState extends State<ScanScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black, size: 28),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            flutterTts.stop();
+            Navigator.of(context).pop();
+          },
         ),
       ),
       body: Column(
         children: [
           const SizedBox(height: 20),
-          // Title
           const Text(
             "Scan your QR Code",
             style: TextStyle(
@@ -105,11 +143,7 @@ class _ScanScreenState extends State<ScanScreen> {
               color: Colors.black,
             ),
           ),
-
-          // Spacer to push scanner to center
           const Spacer(),
-
-          // Center Area: Switch between Camera and Result
           Center(
             child: SizedBox(
               width: 280,
@@ -117,24 +151,16 @@ class _ScanScreenState extends State<ScanScreen> {
               child: _scanned ? _buildResultView() : _buildScannerView(),
             ),
           ),
-
           const Spacer(),
-
-          // Bottom Green Button
           Padding(
             padding: const EdgeInsets.only(bottom: 60),
             child: SizedBox(
               width: 220,
               height: 55,
               child: ElevatedButton(
-                onPressed: _scanned
-                    ? _resetScan
-                    : () {
-                        // Optional: Add logic if you want the button to trigger something manually
-                        // Currently scanner works automatically
-                      },
+                onPressed: _scanned ? _resetScan : () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF4ADE80), // Bright green
+                  backgroundColor: const Color(0xFF4ADE80),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -164,14 +190,11 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 
-  // Widget for the Camera with Corner Borders
   Widget _buildScannerView() {
     return Stack(
       children: [
-        // The Camera
         ClipRRect(
-          borderRadius:
-              BorderRadius.circular(20), // Slight radius for inner camera
+          borderRadius: BorderRadius.circular(20),
           child: MobileScanner(
             controller: cameraController,
             onDetect: (capture) {
@@ -184,37 +207,22 @@ class _ScanScreenState extends State<ScanScreen> {
             },
           ),
         ),
-
-        // Custom Corner Borders (L-Shapes)
-        // Top Left
         Positioned(
-          top: 0,
-          left: 0,
-          child: _buildCorner(isTop: true, isLeft: true),
-        ),
-        // Top Right
+            top: 0, left: 0, child: _buildCorner(isTop: true, isLeft: true)),
         Positioned(
-          top: 0,
-          right: 0,
-          child: _buildCorner(isTop: true, isLeft: false),
-        ),
-        // Bottom Left
+            top: 0, right: 0, child: _buildCorner(isTop: true, isLeft: false)),
         Positioned(
-          bottom: 0,
-          left: 0,
-          child: _buildCorner(isTop: false, isLeft: true),
-        ),
-        // Bottom Right
+            bottom: 0,
+            left: 0,
+            child: _buildCorner(isTop: false, isLeft: true)),
         Positioned(
-          bottom: 0,
-          right: 0,
-          child: _buildCorner(isTop: false, isLeft: false),
-        ),
+            bottom: 0,
+            right: 0,
+            child: _buildCorner(isTop: false, isLeft: false)),
       ],
     );
   }
 
-  // Helper to build the black corner brackets
   Widget _buildCorner({required bool isTop, required bool isLeft}) {
     const double size = 40;
     const double thickness = 4;
@@ -240,7 +248,7 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 
-  // Widget to display result inside the box
+  // --- MODIFIED RESULT VIEW WITH BUTTON ---
   Widget _buildResultView() {
     bool isSafe = _medicineStatus == 'Safe';
     return Container(
@@ -262,14 +270,30 @@ class _ScanScreenState extends State<ScanScreen> {
             color: _getStatusColor(),
           ),
           const SizedBox(height: 10),
-          Text(
-            _medicineStatus.toUpperCase(),
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: _getStatusColor(),
-            ),
+
+          // Row containing Text and Speaker Button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                _medicineStatus.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: _getStatusColor(),
+                ),
+              ),
+              const SizedBox(width: 8),
+              // THE SMALL BUTTON
+              IconButton(
+                icon: const Icon(Icons.volume_up),
+                color: _getStatusColor(),
+                tooltip: "Play Audio",
+                onPressed: _announceResult,
+              ),
+            ],
           ),
+
           const SizedBox(height: 10),
           Divider(color: Colors.grey[300]),
           const SizedBox(height: 10),
