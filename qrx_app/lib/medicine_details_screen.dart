@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
 class MedicineDetailsScreen extends StatefulWidget {
-  final String status; 
+  final String status;
+  final String name;
+  final String manufacturer;
+  final String batch;
 
-  const MedicineDetailsScreen({super.key, required this.status});
+  const MedicineDetailsScreen({
+    super.key,
+    required this.status,
+    required this.name,
+    required this.manufacturer,
+    required this.batch,
+  });
 
   @override
   State<MedicineDetailsScreen> createState() => _MedicineDetailsScreenState();
@@ -11,6 +20,8 @@ class MedicineDetailsScreen extends StatefulWidget {
 
 class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
   bool _expanded = false;
+
+  bool get _isSafe => widget.status.toLowerCase() == 'safe';
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +49,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
               ),
               const SizedBox(height: 16),
 
-              // White card (scrollable, no Expanded)
+              // White card
               Container(
                 width: double.infinity,
                 padding:
@@ -50,18 +61,20 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Text(
-                      'SAFE',
+                    Text(
+                      _isSafe ? 'SAFE' : 'NOT SAFE',
                       style: TextStyle(
-                        color: Colors.green,
+                        color: _isSafe ? Colors.green : Colors.red,
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 4),
-                    const Text(
-                      'Status: Verified & Safe to Use',
-                      style: TextStyle(
+                    Text(
+                      _isSafe
+                          ? 'Status: Verified & Safe to Use'
+                          : 'Status: Counterfeit',
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.black87,
                       ),
@@ -71,14 +84,16 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                     Container(
                       width: 80,
                       height: 80,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFE8FFE8),
+                      decoration: BoxDecoration(
+                        color: _isSafe
+                            ? const Color(0xFFE8FFE8)
+                            : const Color(0xFFFFE5E5),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.check,
+                      child: Icon(
+                        _isSafe ? Icons.check : Icons.close,
                         size: 50,
-                        color: Colors.green,
+                        color: _isSafe ? Colors.green : Colors.red,
                       ),
                     ),
 
@@ -94,7 +109,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                     ),
                     const SizedBox(height: 10),
 
-                    // info box with collapsible text
+                    // info box
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
@@ -105,17 +120,23 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Medicine Name: Paracetamol'),
+                          Text('Medicine Name: ${widget.name}'),
                           const SizedBox(height: 4),
-                          const Text('Manufacturer: Unilab'),
+                          Text('Manufacturer: ${widget.manufacturer}'),
                           const SizedBox(height: 4),
-                          const Text('Batch/Lot: 12345A'),
+                          Text('Batch/Lot: ${widget.batch}'),
                           const SizedBox(height: 4),
-                          const Text('Expiration Date: August 1, 2026'),
+                          Text(_isSafe
+                              ? 'Expiration Date: August 1, 2026'
+                              : 'Expiration Date: Unknown'),
                           const SizedBox(height: 4),
-                          const Text('FDA Status: Approved'),
+                          Text(_isSafe
+                              ? 'FDA Status: Approved'
+                              : 'FDA Status: No record found'),
                           const SizedBox(height: 8),
-                          if (_expanded) ...[
+
+                          // Extra details ONLY when safe
+                          if (_isSafe && _expanded) ...[
                             const Text(
                               'Description:',
                               style: TextStyle(fontWeight: FontWeight.w600),
@@ -151,26 +172,28 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
 
                     const SizedBox(height: 8),
 
-                    // View More / View Less
-                    SizedBox(
-                      width: 120,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xFF3399FF),
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                    // View More / View Less ONLY when safe
+                    if (_isSafe)
+                      SizedBox(
+                        width: 120,
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            backgroundColor: const Color(0xFF3399FF),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 6),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          onPressed: () {
+                            setState(() {
+                              _expanded = !_expanded;
+                            });
+                          },
+                          child:
+                              Text(_expanded ? 'View Less' : 'View More'),
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _expanded = !_expanded;
-                          });
-                        },
-                        child: Text(_expanded ? 'View Less' : 'View More'),
                       ),
-                    ),
                   ],
                 ),
               ),

@@ -27,7 +27,6 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
     final manufacturer = _manufacturerController.text.trim();
     final batch = _batchController.text.trim();
 
-    // 1) Require all fields
     if (name.isEmpty || manufacturer.isEmpty || batch.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill in all medicine details.')),
@@ -35,7 +34,6 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
       return;
     }
 
-    // 2) Check against medicineDatabase (name + manufacturer + batch)
     final match = medicineDatabase.firstWhere(
       (m) =>
           m['name']!.toLowerCase() == name.toLowerCase() &&
@@ -51,12 +49,14 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
       return;
     }
 
-    // 3) If found, go to result screen with status
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => MedicineDetailsScreen(
-          status: match['status']!, // Safe / Counterfeit
+          status: match['status']!,        
+          name: match['name']!,            
+          manufacturer: match['manufacturer']!,
+          batch: match['batch']!,
         ),
       ),
     );
