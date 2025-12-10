@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'scan_screen.dart';
 import 'input_medicine_screen.dart';
+import 'find_medicine_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
-  final String language; // "en", "ceb", "fil"
+  final String language; // 'en', 'ceb', 'fil'
 
   const HomeScreen({
     super.key,
-    this.userName = "User",
-    this.language = "en",
+    this.userName = 'User',
+    this.language = 'en',
   });
 
   @override
   Widget build(BuildContext context) {
-    final texts = _texts[language]!;
+    final texts = _texts[language] ?? _texts['en']!;
 
     return Scaffold(
       backgroundColor: const Color(0xFFA9DFF5),
@@ -48,7 +49,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 30),
 
               // Scan QR button
@@ -56,7 +56,9 @@ class HomeScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const ScanScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const ScanScreen(),
+                    ),
                   );
                 },
                 child: Container(
@@ -87,11 +89,10 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 18),
 
               // Input Medicine button
-              _HomeButton(
+              HomeButton(
                 label: texts['input']!,
                 icon: Icons.edit_note,
                 color: Colors.white,
@@ -104,17 +105,22 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-
               const SizedBox(height: 12),
 
-              // Find Medicine button
-              _HomeButton(
+              // Find Medicine button (fixed)
+              HomeButton(
                 label: texts['find']!,
                 icon: Icons.search,
                 color: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FindMedicineScreen(language: language),
+                    ),
+                  );
+                },
               ),
-
               const SizedBox(height: 26),
 
               // Description
@@ -129,10 +135,9 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
 
-              // Languages with navigation
+              // Language buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -141,11 +146,12 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const HomeScreen(language: "en"),
+                          builder: (_) =>
+                              const HomeScreen(language: 'en'),
                         ),
                       );
                     },
-                    child: const Text("English"),
+                    child: const Text('English'),
                   ),
                   const SizedBox(width: 24),
                   GestureDetector(
@@ -153,11 +159,12 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const HomeScreen(language: "ceb"),
+                          builder: (_) =>
+                              const HomeScreen(language: 'ceb'),
                         ),
                       );
                     },
-                    child: const Text("Cebuano"),
+                    child: const Text('Cebuano'),
                   ),
                   const SizedBox(width: 24),
                   GestureDetector(
@@ -165,11 +172,12 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => const HomeScreen(language: "fil"),
+                          builder: (_) =>
+                              const HomeScreen(language: 'fil'),
                         ),
                       );
                     },
-                    child: const Text("Filipino"),
+                    child: const Text('Filipino'),
                   ),
                 ],
               ),
@@ -181,52 +189,19 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// Texts for each language
-final Map<String, Map<String, String>> _texts = {
-  "en": {
-    "title": "QRx",
-    "subtitle": "Let's check if your medicine is SAFE and RIGHT for you.",
-    "scan": "Scan QR",
-    "input": "Input Medicine",
-    "find": "Find Medicine",
-    "desc":
-        "Prioritize your health with QRx. This app empowers you to verify your medicines, avoid potential risks, and ensure you’re making safe choices every time you take your medication.",
-  },
-  "ceb": {
-    "title": "QRx",
-    "subtitle":
-        "Ato nga susihon kung ang imong tambal SAKTO ug ANGAY para kanimo.",
-    "scan": "I-scan ang QR",
-    "input": "Pag-Input ug Tambal",
-    "find": "Pangita ug Tambal",
-    "desc":
-        "Unaha ang imong kahimsog pinaagi sa QRx. Ang maong app naghatag og gahum kanimo aron mapamatud-an ang pagka-tinuod sa imong mga medisina, malikayan ang posibleng mga risgo, ug masiguro ang luwas nga pagpili sa matag higayon nga moinom ka og tambal.",
-  },
-  "fil": {
-    "title": "QRx",
-    "subtitle":
-        "Suriin natin kung ang iyong gamot ay LIGTAS at TAMA para sa iyo.",
-    "scan": "I-scan ang QR",
-    "input": "Mag-input ng Gamot",
-    "find": "Maghanap ng Gamot",
-    "desc":
-        "Unahin ang iyong kalusugan gamit ang QRx. Binibigyan ka ng kapangyarihan ng app na ito na i-verify ang iyong mga gamot, maiwasan ang mga potensyal na panganib, at tiyaking gumagawa ka ng ligtas na desisyon sa tuwing iinom ka ng iyong gamot.",
-  },
-};
-
-class _HomeButton extends StatelessWidget {
+class HomeButton extends StatelessWidget {
   final String label;
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
 
-  const _HomeButton({
+  const HomeButton({
     required this.label,
     required this.icon,
     required this.color,
     required this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +217,11 @@ class _HomeButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 22, color: Colors.black87),
+              Icon(
+                icon,
+                size: 22,
+                color: Colors.black87,
+              ),
               const SizedBox(width: 12),
               Text(
                 label,
@@ -259,3 +238,37 @@ class _HomeButton extends StatelessWidget {
     );
   }
 }
+
+// Texts map from your original file
+const Map<String, Map<String, String>> _texts = {
+  'en': {
+    'title': 'QRx',
+    'subtitle':
+        'Let\'s check if your medicine is SAFE and RIGHT for you.',
+    'scan': 'Scan QR',
+    'input': 'Input Medicine',
+    'find': 'Find Medicine',
+    'desc':
+        'Prioritize your health with QRx. This app empowers you to verify your medicines, avoid potential risks, and ensure you\'re making safe choices every time you take your medication.',
+  },
+  'ceb': {
+    'title': 'QRx',
+    'subtitle':
+        'Ato nga susihon kung ang imong tambal SAKTO ug ANGAY para kanimo.',
+    'scan': 'I-scan ang QR',
+    'input': 'Pag-Input ug Tambal',
+    'find': 'Pangita ug Tambal',
+    'desc':
+        'Unaha ang imong kahimsog pinaagi sa QRx. Ang maong app naghatag og gahum kanimo aron mapamatud-an ang pagka-tinuod sa imong mga medisina, malikayan ang posibleng mga risgo, ug masiguro ang luwas nga pagpili sa matag higayon nga moinom ka og tambal.',
+  },
+  'fil': {
+    'title': 'QRx',
+    'subtitle':
+        'Suriin natin kung ang iyong gamot ay LIGTAS at TAMA para sa iyo.',
+    'scan': 'I-scan ang QR',
+    'input': 'Mag-input ng Gamot',
+    'find': 'Maghanap ng Gamot',
+    'desc':
+        'Unahin ang iyong kalusugan gamit ang QRx. Binibigyan ka ng kapangyarihan ng app na ito na i-verify ang iyong mga gamot, maiwasan ang mga potensyal na panganib, at tiyaking gumagawa ka ng ligtas na desisyon sa tuwing iinom ka ng iyong gamot.',
+  },
+};

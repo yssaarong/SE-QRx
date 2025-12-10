@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
 import 'medicine_result_screen.dart';
 
-class FindMedicineScreen extends StatelessWidget {
+class FindMedicineScreen extends StatefulWidget {
   final String language; // "en", "ceb", "fil"
 
   const FindMedicineScreen({super.key, this.language = "en"});
 
   @override
+  State<FindMedicineScreen> createState() => _FindMedicineScreenState();
+}
+
+class _FindMedicineScreenState extends State<FindMedicineScreen> {
+  final TextEditingController illnessController = TextEditingController();
+  final TextEditingController symptomsController = TextEditingController();
+
+  @override
+  void dispose() {
+    illnessController.dispose();
+    symptomsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final t = _findTexts[language]!;
+    // safe fallback to English if language key is not found
+    final t = _findTexts[widget.language] ?? _findTexts['en']!;
 
     return Scaffold(
       backgroundColor: const Color(0xFFA9DFF5),
@@ -48,61 +64,22 @@ class FindMedicineScreen extends StatelessWidget {
 
               Text(t['nameLabel']!),
               const SizedBox(height: 6),
-              _RoundedTextField(hint: t['nameHint']!),
-
+              _RoundedTextField(
+                hint: t['nameHint']!,
+                controller: illnessController,
+              ),
               const SizedBox(height: 16),
+
               Text(t['symptomsLabel']!),
               const SizedBox(height: 6),
-              _RoundedTextField(hint: t['symptomsHint']!),
-
-              const SizedBox(height: 28),
-
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      t['voiceTitle']!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      t['voiceSubtitle']!,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-
-              Center(
-                child: InkWell(
-                  onTap: () {
-                    // TODO: voice assistant
-                  },
-                  child: Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.mic,
-                      size: 40,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
+              _RoundedTextField(
+                hint: t['symptomsHint']!,
+                controller: symptomsController,
               ),
 
               const SizedBox(height: 32),
 
-              // Search button -> MedicineResultScreen, same language
+              // SEARCH BUTTON -> opens MedicineResultScreen
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -114,11 +91,26 @@ class FindMedicineScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () {
+                    final illness = illnessController.text.isEmpty
+                        ? 'Fever'
+                        : illnessController.text;
+                    final symptoms = symptomsController.text.isEmpty
+                        ? 'Headache'
+                        : symptomsController.text;
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) =>
-                            MedicineResultScreen(language: language),
+                        builder: (_) => MedicineResultScreen(
+                          illnessName: illness,
+                          symptoms: symptoms,
+                          recommended: 'Paracetamol 500 mg',
+                          alternatives: const [
+                            'Ibuprofen .......................... 200 mg',
+                            'Naproxen ........................... 250 mg',
+                            'Acetaminophen ...................... 500 mg',
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -141,11 +133,17 @@ class FindMedicineScreen extends StatelessWidget {
 
 class _RoundedTextField extends StatelessWidget {
   final String hint;
-  const _RoundedTextField({required this.hint});
+  final TextEditingController? controller;
+
+  const _RoundedTextField({
+    required this.hint,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         filled: true,
         fillColor: const Color(0xFFE8FFE8),
@@ -162,7 +160,7 @@ class _RoundedTextField extends StatelessWidget {
 }
 
 // Texts for FindMedicineScreen
-final Map<String, Map<String, String>> _findTexts = {
+const Map<String, Map<String, String>> _findTexts = {
   "en": {
     "title": "Find Medicine",
     "enterIllness": "Enter Illness",
