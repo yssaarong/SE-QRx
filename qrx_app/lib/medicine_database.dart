@@ -1,7 +1,22 @@
 final List<Map<String, String>> medicineDatabase = [
-  {'name': 'Paracetamol', 'manufacturer': 'PharmaOne', 'status': 'Safe'},
-  {'name': 'Amoxicillin', 'manufacturer': 'HealthCorp', 'status': 'Safe'},
-  {'name': 'FakeCure', 'manufacturer': 'Unknown', 'status': 'Counterfeit'},
+  {
+    'name': 'Paracetamol',
+    'manufacturer': 'PharmaOne',
+    'batch': 'L2025B',
+    'status': 'Safe',
+  },
+  {
+    'name': 'Amoxicillin',
+    'manufacturer': 'HealthCorp',
+    'batch': 'AMX-101',
+    'status': 'Safe',
+  },
+  {
+    'name': 'FakeCure',
+    'manufacturer': 'Unknown',
+    'batch': 'FK-999',
+    'status': 'Counterfeit',
+  },
 ];
 
 String verifyMedicine(String name) {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MedicineDetailsScreen extends StatefulWidget {
-  const MedicineDetailsScreen({super.key});
+  final String status; 
+
+  const MedicineDetailsScreen({super.key, required this.status});
 
   @override
   State<MedicineDetailsScreen> createState() => _MedicineDetailsScreenState();
