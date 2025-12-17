@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'medicine_result_screen.dart';
+import 'database_service.dart';
+import 'translation_service.dart';
 
 class FindMedicineScreen extends StatefulWidget {
   final String language; // "en", "ceb", "fil"
@@ -13,12 +15,51 @@ class FindMedicineScreen extends StatefulWidget {
 class _FindMedicineScreenState extends State<FindMedicineScreen> {
   final TextEditingController illnessController = TextEditingController();
   final TextEditingController symptomsController = TextEditingController();
+  String translatedText = '';
 
   @override
   void dispose() {
     illnessController.dispose();
     symptomsController.dispose();
     super.dispose();
+  }
+
+  Future<void> translateText() async {
+    try {
+      final translation = await TranslationService()
+          .translate('Enter Illness', widget.language);
+      setState(() {
+        translatedText = translation;
+      });
+    } catch (e) {
+      print('Translation failed: $e');
+    }
+  }
+
+  void _searchForMedicine() async {
+    final illness =
+        illnessController.text.isEmpty ? 'Fever' : illnessController.text;
+    final symptoms =
+        symptomsController.text.isEmpty ? 'Headache' : symptomsController.text;
+
+    try {
+      final response =
+          await DatabaseService().verifyMedicine(illness, symptoms);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => MedicineResultScreen(
+            illnessName: illness,
+            symptoms: symptoms,
+            recommended: response['name'] ?? 'Unknown',
+            alternatives: [],
+          ),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error: $e')));
+    }
   }
 
   @override

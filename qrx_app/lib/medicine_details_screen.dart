@@ -190,8 +190,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                               _expanded = !_expanded;
                             });
                           },
-                          child:
-                              Text(_expanded ? 'View Less' : 'View More'),
+                          child: Text(_expanded ? 'View Less' : 'View More'),
                         ),
                       ),
                   ],

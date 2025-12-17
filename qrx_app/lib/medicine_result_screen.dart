@@ -43,7 +43,6 @@ class MedicineResultScreen extends StatelessWidget {
             const SizedBox(height: 6),
             _resultBox(illnessName),
             const SizedBox(height: 16),
-
             const Text(
               'Symptoms:',
               style: TextStyle(fontWeight: FontWeight.w600),
@@ -51,7 +50,6 @@ class MedicineResultScreen extends StatelessWidget {
             const SizedBox(height: 6),
             _resultBox(symptoms),
             const SizedBox(height: 16),
-
             const Text(
               'Recommended Medicine:',
               style: TextStyle(fontWeight: FontWeight.w600),
@@ -59,7 +57,6 @@ class MedicineResultScreen extends StatelessWidget {
             const SizedBox(height: 6),
             _resultBox(recommended),
             const SizedBox(height: 16),
-
             const Text(
               'Alternatives:',
               style: TextStyle(fontWeight: FontWeight.w600),

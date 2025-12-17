@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'medicine_database.dart';
+import 'database_service.dart';
 
 class ScanScreen extends StatefulWidget {
   const ScanScreen({super.key});
@@ -33,7 +33,7 @@ class _ScanScreenState extends State<ScanScreen> {
     await flutterTts.setPitch(1.0);
   }
 
-  void _processQRCode(String qrData) {
+  void _processQRCode(String qrData) async {
     final parts = qrData.split('|');
 
     if (parts.length != 2) {
@@ -50,17 +50,18 @@ class _ScanScreenState extends State<ScanScreen> {
     _medicineName = parts[0].trim();
     _manufacturer = parts[1].trim();
 
-    final medicine = medicineDatabase.firstWhere(
-      (med) =>
-          med['name']!.toLowerCase() == _medicineName.toLowerCase() &&
-          med['manufacturer']!.toLowerCase() == _manufacturer.toLowerCase(),
-      orElse: () => {'status': 'Not Found'},
-    );
-
-    setState(() {
-      _scanned = true;
-      _medicineStatus = medicine['status']!;
-    });
+    try {
+      final response =
+          await DatabaseService().verifyMedicine(_medicineName, _manufacturer);
+      setState(() {
+        _scanned = true;
+        _medicineStatus = response['status'] ?? 'Not Found';
+      });
+    } catch (e) {
+      setState(() {
+        _medicineStatus = 'Error';
+      });
+    }
 
     _announceResult();
   }

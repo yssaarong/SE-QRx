@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'scan_screen.dart';
 import 'input_medicine_screen.dart';
 import 'find_medicine_screen.dart';
+import 'translation_service.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
@@ -12,6 +13,15 @@ class HomeScreen extends StatelessWidget {
     this.userName = 'User',
     this.language = 'en',
   });
+
+  Future<String> translateText(String text) async {
+    try {
+      return await TranslationService().translate(text, language);
+    } catch (e) {
+      print('Translation failed: $e');
+      return text; // Return the original text if translation fails
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,8 +156,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const HomeScreen(language: 'en'),
+                          builder: (_) => const HomeScreen(language: 'en'),
                         ),
                       );
                     },
@@ -159,8 +168,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const HomeScreen(language: 'ceb'),
+                          builder: (_) => const HomeScreen(language: 'ceb'),
                         ),
                       );
                     },
@@ -172,8 +180,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (_) =>
-                              const HomeScreen(language: 'fil'),
+                          builder: (_) => const HomeScreen(language: 'fil'),
                         ),
                       );
                     },
@@ -243,8 +250,7 @@ class HomeButton extends StatelessWidget {
 const Map<String, Map<String, String>> _texts = {
   'en': {
     'title': 'QRx',
-    'subtitle':
-        'Let\'s check if your medicine is SAFE and RIGHT for you.',
+    'subtitle': 'Let\'s check if your medicine is SAFE and RIGHT for you.',
     'scan': 'Scan QR',
     'input': 'Input Medicine',
     'find': 'Find Medicine',
