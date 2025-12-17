@@ -6,7 +6,7 @@ import 'translation_service.dart';
 
 class HomeScreen extends StatelessWidget {
   final String userName;
-  final String language; // 'en', 'ceb', 'fil'
+  final String language;
 
   const HomeScreen({
     super.key,
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
       return await TranslationService().translate(text, language);
     } catch (e) {
       print('Translation failed: $e');
-      return text; // Return the original text if translation fails
+      return text;
     }
   }
 
@@ -34,7 +34,6 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Title
               Text(
                 texts['title']!,
                 style: const TextStyle(
@@ -45,8 +44,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-
-              // Subtitle
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: Text(
@@ -60,8 +57,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-
-              // Scan QR button
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -100,8 +95,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-
-              // Input Medicine button
               HomeButton(
                 label: texts['input']!,
                 icon: Icons.edit_note,
@@ -116,8 +109,6 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 12),
-
-              // Find Medicine button (fixed)
               HomeButton(
                 label: texts['find']!,
                 icon: Icons.search,
@@ -132,8 +123,6 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 26),
-
-              // Description
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Text(
@@ -146,8 +135,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-
-              // Language buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -246,7 +233,6 @@ class HomeButton extends StatelessWidget {
   }
 }
 
-// Texts map from your original file
 const Map<String, Map<String, String>> _texts = {
   'en': {
     'title': 'QRx',

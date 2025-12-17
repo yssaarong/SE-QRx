@@ -14,7 +14,6 @@ class _ScanScreenState extends State<ScanScreen> {
   final MobileScannerController cameraController = MobileScannerController();
   final FlutterTts flutterTts = FlutterTts();
 
-  // State variables
   bool _scanned = false;
   String _medicineStatus = "";
   String _medicineName = "";
@@ -66,7 +65,6 @@ class _ScanScreenState extends State<ScanScreen> {
     _announceResult();
   }
 
-  // Speak Logic
   void _announceResult() async {
     String speechText = "";
 
@@ -249,7 +247,6 @@ class _ScanScreenState extends State<ScanScreen> {
     );
   }
 
-  // --- MODIFIED RESULT VIEW WITH BUTTON ---
   Widget _buildResultView() {
     bool isSafe = _medicineStatus == 'Safe';
     return Container(
@@ -271,8 +268,6 @@ class _ScanScreenState extends State<ScanScreen> {
             color: _getStatusColor(),
           ),
           const SizedBox(height: 10),
-
-          // Row containing Text and Speaker Button
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -285,7 +280,6 @@ class _ScanScreenState extends State<ScanScreen> {
                 ),
               ),
               const SizedBox(width: 8),
-              // THE SMALL BUTTON
               IconButton(
                 icon: const Icon(Icons.volume_up),
                 color: _getStatusColor(),
@@ -294,7 +288,6 @@ class _ScanScreenState extends State<ScanScreen> {
               ),
             ],
           ),
-
           const SizedBox(height: 10),
           Divider(color: Colors.grey[300]),
           const SizedBox(height: 10),

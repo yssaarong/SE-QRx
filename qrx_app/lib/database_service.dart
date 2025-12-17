@@ -3,27 +3,24 @@ import 'package:http/http.dart' as http;
 
 class DatabaseService {
   static const String _baseUrl =
-      'http://192.168.254.102:80/verify.php'; // Your server URL
+      'http://192.168.254.102:80/verify.php'; //if other device, use device ip
 
   Future<Map<String, dynamic>> verifyMedicine(
       String name, String manufacturer) async {
     try {
-      // Check if either name or manufacturer is empty
       if (name.isEmpty || manufacturer.isEmpty) {
         print("Invalid Input: name or manufacturer is empty.");
         throw Exception(
             "Invalid Input: Both name and manufacturer are required.");
       }
 
-      // Construct the URL with query parameters
       final url = Uri.parse('$_baseUrl?name=$name&manufacturer=$manufacturer');
 
       // Print request data
       print("Sending request to $url");
 
-      final response = await http.get(url); // Change this to GET
+      final response = await http.get(url);
 
-      // Print response status code and body for debugging
       print("Response Status Code: ${response.statusCode}");
       print("Response Body: ${response.body}");
 

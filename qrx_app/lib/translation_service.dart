@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class TranslationService {
-  // 1. Get your API Key from https://aistudio.google.com/
   static const String _apiKey = 'AIzaSyDjvIWAFPwJ5Pqho_LbVfZNbKCb5QJqZRU';
   static const String _apiUrl =
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$_apiKey';
@@ -10,7 +9,6 @@ class TranslationService {
   static final Map<String, String> _cache = {};
 
   Future<String> translate(String text, String targetLanguage) async {
-    // Mapping internal keys to full names for the LLM
     String langName = targetLanguage == 'ceb'
         ? 'Cebuano'
         : (targetLanguage == 'fil' ? 'Filipino' : 'English');
@@ -38,7 +36,6 @@ class TranslationService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // Navigate the Gemini JSON response structure
         final translatedText = data['candidates'][0]['content']['parts'][0]
                 ['text']
             .toString()
@@ -47,10 +44,10 @@ class TranslationService {
         _cache[cacheKey] = translatedText;
         return translatedText;
       } else {
-        return text; // Fallback to original text if API fails
+        return text;
       }
     } catch (e) {
-      return text; // Fallback on error
+      return text;
     }
   }
 }

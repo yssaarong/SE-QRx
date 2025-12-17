@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'medicine_details_screen.dart';
-import 'database_service.dart'; // Import the DatabaseService
-import 'translation_service.dart'; // Import the TranslationService
+import 'database_service.dart';
+import 'translation_service.dart';
 
 class InputMedicineScreen extends StatefulWidget {
   const InputMedicineScreen({Key? key}) : super(key: key);
@@ -15,8 +15,7 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
   final TextEditingController _manufacturerController = TextEditingController();
   final TextEditingController _batchController = TextEditingController();
 
-  String language =
-      "en"; // Default language, can be updated based on user choice
+  String language = "en";
 
   @override
   void dispose() {
@@ -26,23 +25,20 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
     super.dispose();
   }
 
-  // Method to translate text asynchronously
   Future<String> translateText(String text) async {
     try {
       return await TranslationService().translate(text, language);
     } catch (e) {
       print('Translation failed: $e');
-      return text; // Return the original text if translation fails
+      return text;
     }
   }
 
-  // Method to check medicine in the database and navigate
   void _checkAndNavigate() async {
     final name = _medicineController.text;
     final manufacturer = _manufacturerController.text;
     final batch = _batchController.text;
 
-    // Validate input fields
     if (name.isEmpty || manufacturer.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -55,11 +51,9 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
         "User Data - Name: $name, Manufacturer: $manufacturer, Batch: $batch");
 
     try {
-      // Send request to the server
       final result = await DatabaseService().verifyMedicine(name, manufacturer);
       print("Medicine Check Result: $result");
 
-      // Check for the status in the response and handle accordingly
       if (result.isEmpty || result['status'] == 'Invalid Input') {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid input, please try again.')),
@@ -69,16 +63,14 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
 
       print("Navigating to MedicineDetailsScreen...");
 
-      // Ensure navigation is happening correctly
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => MedicineDetailsScreen(
-            status: result['status'] ?? 'Unknown', // Default value if null
-            name: result['name'] ?? 'Unknown', // Default value if null
-            manufacturer:
-                result['manufacturer'] ?? 'Unknown', // Default value if null
-            batch: result['batch'] ?? 'Unknown', // Default value if null
+            status: result['status'] ?? 'Unknown',
+            name: result['name'] ?? 'Unknown',
+            manufacturer: result['manufacturer'] ?? 'Unknown',
+            batch: result['batch'] ?? 'Unknown',
           ),
         ),
       );
@@ -122,8 +114,6 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // NAME
               const Text(
                 "Name:",
                 style: TextStyle(
@@ -148,8 +138,6 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // MANUFACTURER
               const Text(
                 "Manufacturer:",
                 style: TextStyle(
@@ -174,8 +162,6 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                 ),
               ),
               const SizedBox(height: 12),
-
-              // BATCH / LOT
               const Text(
                 "Batch/Lot Number:",
                 style: TextStyle(
@@ -200,8 +186,6 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-
-              // CHECK BUTTON
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(

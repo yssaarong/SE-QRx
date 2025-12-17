@@ -4,7 +4,7 @@ import 'database_service.dart';
 import 'translation_service.dart';
 
 class FindMedicineScreen extends StatefulWidget {
-  final String language; // "en", "ceb", "fil"
+  final String language;
 
   const FindMedicineScreen({super.key, this.language = "en"});
 
@@ -64,7 +64,6 @@ class _FindMedicineScreenState extends State<FindMedicineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // safe fallback to English if language key is not found
     final t = _findTexts[widget.language] ?? _findTexts['en']!;
 
     return Scaffold(
@@ -75,7 +74,6 @@ class _FindMedicineScreenState extends State<FindMedicineScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back + title
               Row(
                 children: [
                   IconButton(
@@ -93,7 +91,6 @@ class _FindMedicineScreenState extends State<FindMedicineScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-
               Text(
                 t['enterIllness']!,
                 style: const TextStyle(
@@ -102,7 +99,6 @@ class _FindMedicineScreenState extends State<FindMedicineScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-
               Text(t['nameLabel']!),
               const SizedBox(height: 6),
               _RoundedTextField(
@@ -110,17 +106,13 @@ class _FindMedicineScreenState extends State<FindMedicineScreen> {
                 controller: illnessController,
               ),
               const SizedBox(height: 16),
-
               Text(t['symptomsLabel']!),
               const SizedBox(height: 6),
               _RoundedTextField(
                 hint: t['symptomsHint']!,
                 controller: symptomsController,
               ),
-
               const SizedBox(height: 32),
-
-              // SEARCH BUTTON -> opens MedicineResultScreen
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -200,7 +192,6 @@ class _RoundedTextField extends StatelessWidget {
   }
 }
 
-// Texts for FindMedicineScreen
 const Map<String, Map<String, String>> _findTexts = {
   "en": {
     "title": "Find Medicine",
