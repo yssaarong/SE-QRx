@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'dart:io';
 
 class TranslationService {
-  static const String _apiKey = 'AIzaSyDjvIWAFPwJ5Pqho_LbVfZNbKCb5QJqZRU';
-  static const String _apiUrl =
+  static final String _apiKey = Platform.environment['TRANSLATION_API_KEY']!;
+  static final String _apiUrl =
       'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$_apiKey';
 
   static final Map<String, String> _cache = {};
