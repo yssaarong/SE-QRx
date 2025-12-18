@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class MedicineDetailsScreen extends StatefulWidget {
   final String status;
@@ -20,8 +21,47 @@ class MedicineDetailsScreen extends StatefulWidget {
 
 class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
   bool _expanded = false;
-
+  bool _isPlaying = false;
+  FlutterTts flutterTts = FlutterTts();
   bool get _isSafe => widget.status.toLowerCase() == 'safe';
+  @override
+  void initState() {
+    super.initState();
+    _announceMedicineDetails();
+    _initTts();
+  }
+
+  void _initTts() async {
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setPitch(1.0);
+  }
+
+  void _announceMedicineDetails() async {
+    String textToRead =
+        "Medicine Details: ${widget.name}, Manufacturer: ${widget.manufacturer}, Batch: ${widget.batch}, Status: ${widget.status}.";
+
+    await flutterTts.speak(textToRead);
+    setState(() {
+      _isPlaying = true;
+    });
+  }
+
+  void _pauseTts() async {
+    await flutterTts.stop();
+    setState(() {
+      _isPlaying = false;
+    });
+  }
+
+  void _playTts() async {
+    await flutterTts.speak(
+        "Resuming: Medicine Details: ${widget.name}, Manufacturer: ${widget.manufacturer}, Batch: ${widget.batch}, Status: ${widget.status}.");
+    setState(() {
+      _isPlaying = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +73,6 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Back + title
               Row(
                 children: [
                   IconButton(
@@ -48,8 +87,6 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-
-              // White card
               Container(
                 width: double.infinity,
                 padding:
@@ -80,7 +117,6 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-
                     Container(
                       width: 80,
                       height: 80,
@@ -96,9 +132,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                         color: _isSafe ? Colors.green : Colors.red,
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
                     const Text(
                       'Medicine Info',
                       style: TextStyle(
@@ -108,8 +142,6 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-
-                    // info box
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
@@ -134,8 +166,6 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                               ? 'FDA Status: Approved'
                               : 'FDA Status: No record found'),
                           const SizedBox(height: 8),
-
-                          // Extra details ONLY when safe
                           if (_isSafe && _expanded) ...[
                             const Text(
                               'Description:',
@@ -169,10 +199,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 8),
-
-                    // View More / View Less ONLY when safe
                     if (_isSafe)
                       SizedBox(
                         width: 120,
@@ -196,10 +223,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // Tips card
               Container(
                 width: double.infinity,
                 padding:
@@ -229,10 +253,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              // Back button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -244,11 +265,16 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (_isPlaying) {
+                      _pauseTts();
+                    } else {
+                      _playTts();
+                    }
                   },
-                  child: const Text(
-                    'Back',
-                    style: TextStyle(
+                  child: Text(
+                    _isPlaying ? 'Pause TTS' : 'Play TTS',
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 255, 255, 255),
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
