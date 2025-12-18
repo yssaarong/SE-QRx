@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'medicine_details_screen.dart';
 import 'database_service.dart';
 import 'translation_service.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 
 class InputMedicineScreen extends StatefulWidget {
   const InputMedicineScreen({Key? key}) : super(key: key);
@@ -14,6 +15,8 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
   final TextEditingController _medicineController = TextEditingController();
   final TextEditingController _manufacturerController = TextEditingController();
   final TextEditingController _batchController = TextEditingController();
+
+  FlutterTts flutterTts = FlutterTts();
 
   String language = "en";
 
@@ -60,7 +63,7 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
         );
         return;
       }
-
+      _announceMedicineDetails(name, manufacturer, batch);
       print("Navigating to MedicineDetailsScreen...");
 
       Navigator.push(
@@ -80,6 +83,21 @@ class _InputMedicineScreenState extends State<InputMedicineScreen> {
         const SnackBar(content: Text('Error fetching data.')),
       );
     }
+  }
+
+  void _announceMedicineDetails(
+      String name, String manufacturer, String batch) async {
+    String textToRead =
+        "Medicine Details: $name, Manufacturer: $manufacturer, Batch: $batch.";
+
+    // Set TTS properties
+    await flutterTts.setLanguage("en-US");
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.setVolume(1.0);
+    await flutterTts.setPitch(1.0);
+
+    // Announce the details aloud
+    await flutterTts.speak(textToRead);
   }
 
   @override
